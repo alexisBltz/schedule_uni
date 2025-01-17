@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import pool from '@/util/db';
+import pool, { RowDataPacket } from '@/util/db';
 import { ApiResponse } from '@/types/database';
 import { handleApiError } from '@/util/errorHandler';
 
@@ -22,7 +22,7 @@ export default async function handler(
     const connection = await pool.getConnection();
     
     try {
-      const [rows] = await connection.query<TipoCurso[]>('SELECT * FROM tipo_curso');
+      const [rows] = await connection.query<RowDataPacket[]>('SELECT * FROM tipo_curso');
       
       res.status(200).json({
         success: true,
@@ -33,6 +33,6 @@ export default async function handler(
       connection.release();
     }
   } catch (error) {
-    handleApiError(error, res);
+    handleApiError<ApiResponse<TipoCurso[]>>(error, res);
   }
 }

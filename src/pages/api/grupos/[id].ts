@@ -36,7 +36,6 @@ export default async function handler(
         return res.status(200).json({
           success: true,
           message: 'Grupo eliminado correctamente',
-          data: null,
         });
       }
 

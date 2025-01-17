@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ApiResponse, Curso } from '@/types/database';
-import { handleApiError } from '@/util/errorHandler';
+//import { handleApiError } from '@/util/errorHandler';
 import { createCurso, updateCurso, deleteCurso, getCursoById } from '@/util/CursoService';
 
 const validateCursoData = (data: Partial<Curso>): boolean => {
@@ -86,6 +86,10 @@ export default async function handler(
         });
     }
   } catch (error) {
-    handleApiError(error, res);
+    return res.status(500).json({
+      success: false,
+      message: 'Error del servidor',
+      error: error instanceof Error ? error.message : 'Error desconocido'
+    });
   }
 }

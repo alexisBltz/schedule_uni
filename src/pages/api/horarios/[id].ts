@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ApiResponse, Horario } from '@/types/database';
-import { handleApiError } from '@/util/errorHandler';
+//import { handleApiError } from '@/util/errorHandler';
 import { /*createHorario, updateHorario,*/ deleteHorario, getHorarioById } from '@/util/HorarioService';
 
 export default async function handler(
@@ -35,7 +35,11 @@ export default async function handler(
           data: Horario,
         });
       } catch (error) {
-        handleApiError(error, res);
+        return res.status(500).json({
+          success: false,
+          message: 'Error del servidor',
+          error: error instanceof Error ? error.message : 'Error desconocido'
+        });
       }
       break;
 
@@ -56,7 +60,11 @@ export default async function handler(
             message: 'Horario eliminado correctamente',
           });
         } catch (error) {
-          handleApiError(error, res);
+          return res.status(500).json({
+            success: false,
+            message: 'Error del servidor',
+            error: error instanceof Error ? error.message : 'Error desconocido'
+          });
         }
         break;
 
