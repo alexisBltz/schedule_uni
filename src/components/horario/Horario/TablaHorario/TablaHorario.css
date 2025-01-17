@@ -1,0 +1,15 @@
+.container-tabla-horario {
+    display: grid;
+    gap: .25vw;
+    padding: .1vw;
+}
+
+grid-item-celda {
+  background-color: #f8f2fc;
+  border-radius: .2vw; 
+}
+
+
+
+
+
