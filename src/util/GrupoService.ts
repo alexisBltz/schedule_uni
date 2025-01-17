@@ -1,13 +1,16 @@
 
 import { Grupo } from '@/types/database';
 import pool from '@/util/db';
+import { RowDataPacket, ResultSetHeader } from 'mysql2/promise';
 
+// Interfaces para extender RowDataPacket
+interface GrupoRow extends Grupo, RowDataPacket {}
 
 //metodo para obtener un grupo
 export async function getGrupoById({id}: Partial<Grupo>): Promise<Grupo> {
   const connection = await pool.getConnection();
   try {
-    const [grupo] = await connection.query<Grupo>('SELECT * FROM grupos WHERE id = ?', [id]);
+    const [grupo] = await connection.query<GrupoRow[]>('SELECT * FROM grupos WHERE id = ?', [id]);
     return grupo[0];
   } finally {
     connection.release();
@@ -15,10 +18,14 @@ export async function getGrupoById({id}: Partial<Grupo>): Promise<Grupo> {
 }
 
 // metodo para eliminar un grupo
-export async function deleteGrupo({id}: Partial<Grupo>): Promise<void> {
+export async function deleteGrupo(id: number): Promise<boolean> {
   const connection = await pool.getConnection();
   try {
-    await connection.query('DELETE FROM grupos WHERE id = ?', [id]);
+    const [result] = await connection.query<ResultSetHeader>(
+      'DELETE FROM grupos WHERE id = ?',
+      [id]
+    );
+    return result.affectedRows > 0;
   } finally {
     connection.release();
   }
@@ -31,7 +38,7 @@ export async function createGrupoSchedules(
   try {
     await connection.beginTransaction();  // Iniciar transacción
 
-    const [resultGrupo] = await connection.query(     // Insertar el grupo
+    const [resultGrupo] = await connection.query<ResultSetHeader>(     // Insertar el grupo
       'INSERT INTO grupos (curso_id, grupo) VALUES (?, ?)',
       [curso_id, grupo]
     );
@@ -52,7 +59,7 @@ export async function createGrupoSchedules(
     }
 
     // Obtener el grupo completo con sus horarios
-    const [grupoNew] = await connection.query<Grupo[]>(`
+    const [grupoNew] = await connection.query<GrupoRow[]>(`
       SELECT g.*, 
         JSON_ARRAYAGG(
           JSON_OBJECT(

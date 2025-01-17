@@ -1,13 +1,16 @@
 
 import { Horario } from '@/types/database';
 import pool from '@/util/db';
+import { RowDataPacket, ResultSetHeader } from 'mysql2/promise';
 
+// Interfaces para extender RowDataPacket
+interface HorarioRow extends Horario, RowDataPacket {}
 
 //metodo para obtener un Horario
 export async function getHorarioById(id: number): Promise<Horario> {
   const connection = await pool.getConnection();
   try {
-    const [horario] = await connection.query<Horario>('SELECT * FROM horarios WHERE id = ?', [id]);
+    const [horario] = await connection.query<HorarioRow[]>('SELECT * FROM horarios WHERE id = ?', [id]);
     return horario[0];
   } finally {
     connection.release();
@@ -27,10 +30,14 @@ export async function getHorarioById(id: number): Promise<Horario> {
 }*/
 
 // metodo para eliminar un Horario
-export async function deleteHorario(id: number): Promise<void> {
+export async function deleteHorario(id: number): Promise<boolean> {
   const connection = await pool.getConnection();
   try {
-    await connection.query('DELETE FROM horarios WHERE id = ?', [id]);
+    const [result] = await connection.query<ResultSetHeader>(
+      'DELETE FROM horarios WHERE id = ?',
+      [id]
+    );
+    return result.affectedRows > 0;
   } finally {
     connection.release();
   }
