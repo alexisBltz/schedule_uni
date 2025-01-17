@@ -8,6 +8,10 @@ interface CursoVistaRow extends CursoVista, RowDataPacket {}
 
 type TipoCurso = 'TEORIA' | 'LABORATORIO';
 
+export interface CursosAgrupados {
+    [key: string]: CursoVista[];
+}
+
 export async function getCursosByTipo(tipo: TipoCurso): Promise<CursoVista[]> {
   const connection = await pool.getConnection();
   
@@ -47,7 +51,7 @@ export async function getCursosTipo(): Promise<{ [key: string]: CursoVista[] }> 
         nombre: row.nombre,
         tipo: row.tipo,
         color: row.color,
-        grupos: row.grupos[0] !== null ? row.grupos : null
+        grupos: row.grupos && row.grupos[0] !== null ? row.grupos : null
       };
 
       if (!acc[row.tipo]) {

@@ -40,5 +40,5 @@ export interface CursoVista {
     nombre: string;
     tipo: 'TEORIA' | 'LABORATORIO';
     color: string;
-    grupos: string; // JSON string que necesitará ser parseado
+    grupos: string | null; // JSON string que necesitará ser parseado
 }
