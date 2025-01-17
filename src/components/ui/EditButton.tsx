@@ -12,7 +12,7 @@ const EditButton: React.FC<ActionButtonProps> = ({ onClick, disabled = false, la
       <button
         onClick={(e) => {
           e.stopPropagation(); 
-          onClick(e);
+          onClick();
         }}
         disabled={disabled}
         className="relative inline-flex items-center justify-center p-2 rounded-lg transition-all duration-200 
