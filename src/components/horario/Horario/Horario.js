@@ -92,7 +92,7 @@ function Render({ baseDeDatos }) {
     return [cursos, selectores];
 }
 
-function mapCursos(baseDeDatos, valoresSeleccionados, handleChange) {
+function mapCursos(baseDeDatos, valoresSeleccionados) {
     return baseDeDatos.map((curso) => {
         return curso.grupos.map((grupo) => {
             return grupo.horarios.map((horario) => {

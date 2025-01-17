@@ -1,7 +1,7 @@
 import { NextApiResponse } from 'next';
 import { ApiResponse } from '@/types/database';
 
-export const handleApiError = (error: unknown, res: NextApiResponse<ApiResponse<any>>) => {
+export const handleApiError = (error: unknown, res: NextApiResponse<ApiResponse<unknown>>) => {
   console.error('Error:', error);
 
   // Error de base de datos

@@ -1,4 +1,4 @@
-    import React, { useState} from 'react';
+
     import './SelectCurso.css';
 
     export default function SelectCurso ({curso, valorSeleccionado, handleChange}) {

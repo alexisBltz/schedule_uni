@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ApiResponse, Grupo } from '@/types/database';
-import { handleApiError } from '@/util/errorHandler';
+//import { handleApiError } from '@/util/errorHandler';
 import { createGrupoSchedules, /* updateGrupo, */ deleteGrupo, getGrupoById } from '@/util/GrupoService';
 
 export default async function handler(
