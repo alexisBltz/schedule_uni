@@ -12,7 +12,7 @@ export interface DataRowProps {
   course: Course;
   onEditCourse: (course: Course) => void;
   onDeleteCourse: (course: Course) => void;
-  onAddGroup: (course: Course) => void;
+  onAddGroup: (group: Group) => void;
   onDeleteGroup: (group: Group) => void;
 }
 
