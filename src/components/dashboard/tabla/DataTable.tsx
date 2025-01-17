@@ -12,7 +12,7 @@ export interface DataRowProps {
   course: Course;
   onEditCourse: (course: Course) => void;
   onDeleteCourse: (course: Course) => void;
-  onAddGroup: (group: Group) => void;
+  onAddGroup: (course: Course) => void;
   onDeleteGroup: (group: Group) => void;
 }
 
@@ -57,6 +57,7 @@ const DataTable: React.FC<{ data: Course[]; onRefresh: () => void }> = ({ data, 
   };
 
   const handleAddGroup = (course: Course) => {
+    console.log('Adding group to course:', course.nombre);
     setSelectedItem({ parentCourse: course });  
     setIsModalOpen(true);
   };

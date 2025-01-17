@@ -40,7 +40,7 @@ const TableRow: React.FC<DataRowProps> = ({ course, onEditCourse, onDeleteCourse
             </div>
             <div className='p-0 m-0 pt-1 md:pt-2'>
               <AddGroupButton text='Agregar' 
-                onClick={() => onAddGroup({id: 0, grupo: '', curso_id: course.id}) /* corregir a futuro*/} 
+                onClick={() => onAddGroup(course) /* corregir a futuro {id: 0, grupo: '', curso_id: course.id}*/} 
               />
             </div>
           </Accordion>
@@ -48,7 +48,7 @@ const TableRow: React.FC<DataRowProps> = ({ course, onEditCourse, onDeleteCourse
           <div className="flex flex-row items-center justify-between lg:px-2 md:gap-0 gap-4">
             <p>No hay grupos</p>
             <AddGroupButton text='Agregar' 
-              onClick={() => onAddGroup({id: 0, grupo: '', curso_id: course.id}) /* corregir a futuro*/} 
+              onClick={() => onAddGroup(course) /* corregir a futuro {id: 0, grupo: '', curso_id: course.id}*/} 
             />
           </div>
         )}
