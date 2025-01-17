@@ -18,7 +18,7 @@ export async function getGrupoById({id}: Partial<Grupo>): Promise<Grupo> {
 }
 
 // metodo para eliminar un grupo
-export async function deleteGrupo(id: number): Promise<boolean> {
+export async function deleteGrupo({id}: Partial<Grupo>): Promise<boolean> {
   const connection = await pool.getConnection();
   try {
     const [result] = await connection.query<ResultSetHeader>(
