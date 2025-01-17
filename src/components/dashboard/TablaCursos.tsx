@@ -30,28 +30,32 @@ const TablaCursos = ({ onSetRefresh, searchQuery }: TablaCursosProps) => {
     }, [refreshKey]);
 
     useEffect(() => {
-        // Registrar la función de refresh con el componente padre
-        onSetRefresh(() => setRefreshKey(prev => prev + 1));
+        onSetRefresh(() => setRefreshKey(prev => prev + 1));    // Registrar la función de refresh con el componente padre
     }, [onSetRefresh]);
 
-    // Filtrar cursos basado en searchQuery con manejo seguro de tipos
     const filteredCourses = useMemo(() => {
-        if (!courses) return {
-        TEORIA: [],
-        LABORATORIO: []
+        if (!courses || typeof courses !== "object") { 
+            return {    // Manejo seguro para cuando courses no está definido
+                TEORIA: [],
+                LABORATORIO: []
+            };
+        }
+    
+        // Función para filtrar cursos por nombre
+        const filterByName = (courseArray: Course[] | undefined): Course[] => {
+            if (!courseArray) return []; // Retorna vacío si la propiedad es undefined
+            return courseArray.filter(course =>
+                course.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+            );
         };
-        
-        const filterByName = (courseArray: Course[]): Course[] => {
-        return courseArray.filter(course => 
-            course.nombre.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        };
-
+    
+        // Retornar los cursos filtrados
         return {
-        TEORIA: filterByName(courses.TEORIA),
-        LABORATORIO: filterByName(courses.LABORATORIO)
+            TEORIA: filterByName(courses.TEORIA),
+            LABORATORIO: filterByName(courses.LABORATORIO)
         };
     }, [courses, searchQuery]);
+    
 
     return (
         <div className='min-h-80'>

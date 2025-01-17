@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ApiResponse, Curso, CursoVista } from '@/types/database';
 //import { handleApiError } from '@/util/errorHandler';
-import { getCursosByTipo, getCursosTipo } from '@/util/CursoService';
+import { getCursosByTipo, getCursosTipo, CursosAgrupados } from '@/util/CursoService';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ApiResponse<Curso[]|CursoVista[]>>
+  res: NextApiResponse<ApiResponse<Curso[]|CursoVista[]|CursosAgrupados>>
 ) {
   if (req.method !== 'GET') {
     return res.status(405).json({
@@ -19,8 +19,7 @@ export default async function handler(
 
     // Si no se especifica un tipo, devolver todos los cursos agrupados por tipo
     if (tipo==='all') {
-      const cursosPorTipo = await getCursosTipo();
-      const cursos = Object.values(cursosPorTipo).flat(); // Convierte el objeto { [key: string]: CursoVista[] } en un arreglo plano CursoVista[]
+      const cursos: {[key: string]: CursoVista[]}  = await getCursosTipo(); //modificar luego
       return res.status(200).json({
         success: true,
         message: 'Todos los cursos obtenidos correctamente',
@@ -43,6 +42,8 @@ export default async function handler(
       message: `Cursos de ${tipo} obtenidos correctamente`,
       data: cursos,
     });
+
+
   } catch (error) {
     return res.status(500).json({
       success: false,
