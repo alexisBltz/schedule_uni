@@ -31,7 +31,7 @@ function renderGridItem() {
             <div
                 className="grid-item"
                 style={{
-                    backgroundColor: "#fff7fc",
+                    backgroundColor: "#f4f0fb",
                     borderRadius: ".2vw",
                     gridColumn: i + 2,
                     gridRow: k + 2,
