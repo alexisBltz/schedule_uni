@@ -10,7 +10,6 @@ export const getCourses = async (): Promise<CourseData> => {
 export const getCoursesByType = async (tipo: string): Promise<Course[]> => {
     return tipo === "teoria" ? fetchWithTimeout('/api/cursos/tipo/teoria') 
             : tipo === "laboratorio" ? fetchWithTimeout('/api/cursos/tipo/laboratorio')
-            : tipo === "all" ? fetchWithTimeout('/api/cursos/tipo/all')
             : [];
 }
 

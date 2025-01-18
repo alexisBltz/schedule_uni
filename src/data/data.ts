@@ -1,8 +1,7 @@
 export const COLORS: string[] = [
-    '#577F92', '#443453', '#616f6a', '#ac7b48', '#4c4ca5', '#ff5a1d', '#196F3D', 
-    '#3498db',
-    '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#7f8c8d', 
-    '#d35400'
+    '#4C4CA5', '#E0A75E', '#D63484', '#196F3D', '#FFAA80', '#577F92', '#0C4A6E', '#0000ff', 
+    '#C92A2A', '#A61E4D', '#087F5B', '#1864AB', '#EAB308', '#D50000', '#CA7373', '#468585', '#E9C46A', '#FF5A1D', '#7071E8', '#F43F5E'
+            
 ];
   
 export const DAYS: string[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];

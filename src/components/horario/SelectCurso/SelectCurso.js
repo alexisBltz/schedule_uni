@@ -16,6 +16,8 @@
     }
 
     function OptionCurso ({curso}) {
+        const gruposOrdenados = curso.grupos.sort((a, b) => a.grupo.localeCompare(b.grupo));
+        console.log(gruposOrdenados);
         return curso.grupos.map(grupo => (
             <option key={`${curso.id}-${grupo.grupo}`} value={`${curso.id}-${grupo.grupo}`}>
                 GRUPO {grupo.grupo}

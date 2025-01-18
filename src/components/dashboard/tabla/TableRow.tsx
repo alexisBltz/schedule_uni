@@ -11,6 +11,8 @@ const TableRow: React.FC<DataRowProps> = ({ course, onEditCourse, onDeleteCourse
   const numGrupos = course.grupos ? course.grupos.length : 0;
   const hasGroups = numGrupos > 0;
 
+  //daaaaaaaaaaaa
+  course.grupos?.sort((a, b) => a.grupo.localeCompare(b.grupo));
   return (
     <tr 
       className={`
