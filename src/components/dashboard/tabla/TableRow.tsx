@@ -21,7 +21,7 @@ const TableRow: React.FC<DataRowProps> = ({ course, onEditCourse, onDeleteCourse
           ? 'hover:bg-indigo-50 odd:bg-white even:bg-slate-50/50' 
           : 'bg-red-100 hover:bg-red-200'
         } 
-        cursor-pointer group
+         group
       `}
     >
       <TableTd className="hidden md:table-cell">{course.id}</TableTd>
