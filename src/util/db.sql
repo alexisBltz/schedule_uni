@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS horarios (
 -- Elimina la vista si existe (MySQL no soporta IF NOT EXISTS en CREATE VIEW)
 DROP VIEW IF EXISTS v_cursos_completos;
 
+
 CREATE VIEW v_cursos_completos AS
 SELECT
   c.id,
@@ -50,8 +51,8 @@ SELECT
                       JSON_OBJECT(
                         'id', h.id,
                         'dia', h.dia,
-                        'hora_ini', h.hora_ini,
-                        'hora_fin', h.hora_fin
+                        'hora_ini', DATE_FORMAT(h.hora_ini, '%H:%i'),
+                        'hora_fin', DATE_FORMAT(h.hora_fin, '%H:%i')
                       )
                    )
             FROM horarios h
