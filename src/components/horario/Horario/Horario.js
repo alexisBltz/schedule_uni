@@ -66,9 +66,7 @@ export default function Horario () {
             </div>
             <div className='container-selectores'>
                 <Selectores 
-                tituloTeoria={"Seleccionar Cursos"}
                 selectTeoria={selectTeo} 
-                tituloLab={"Seleccionar Labs"}
                 selectLab={selectLab}
                 />
             </div>
@@ -77,7 +75,22 @@ export default function Horario () {
 }
 
 function Render({ baseDeDatos }) {
-    const [valoresSeleccionados, setValoresSeleccionados] = useState({});
+    // Leer del localStorage al iniciar
+    const [valoresSeleccionados, setValoresSeleccionados] = useState(() => {
+        try {
+            const stored = localStorage.getItem('valoresSeleccionados');
+            return stored ? JSON.parse(stored) : {};
+        } catch {
+            return {};
+        }
+    });
+
+    // Guardar en localStorage cada vez que cambie
+    useEffect(() => {
+        try {
+            localStorage.setItem('valoresSeleccionados', JSON.stringify(valoresSeleccionados));
+        } catch {}
+    }, [valoresSeleccionados]);
 
     const handleChange = (cursoId, valorSeleccionado) => {
         setValoresSeleccionados(prevState => ({
