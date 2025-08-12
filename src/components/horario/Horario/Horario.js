@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
 import "./Horario.css";
 //import datos from "../../data/datos.json"
