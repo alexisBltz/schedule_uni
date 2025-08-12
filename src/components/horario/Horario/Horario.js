@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 import "./Horario.css";
 //import datos from "../../data/datos.json"
@@ -13,7 +14,7 @@ import Curso from '../Curso/Curso';
 import Loading from '@/components/ui/loading';
 import { getCoursesByType } from '@/util/api';
 
-export default function Horario () {    
+export default function Horario () {
     const [datosCursosTeo, setDatosCursosTeo] = useState([]);
     const [datosCursosLab, setDatosCursosLab] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -40,8 +41,9 @@ export default function Horario () {
             fetchData();
         }, []);
 
-        const [cursosTeo, selectTeo] = Render({ baseDeDatos: datosCursosTeo });
-        const [cursosLab, selectLab] = Render({ baseDeDatos: datosCursosLab });
+
+    const [cursosTeo, selectTeo, valoresSeleccionados, ] = Render({ baseDeDatos: datosCursosTeo, exposeState: true });
+    const [cursosLab, selectLab] = Render({ baseDeDatos: datosCursosLab });
 
         if (loading) {
             return (
@@ -59,12 +61,22 @@ export default function Horario () {
             );
         }
 
+    const handleShare = () => {
+        const encoded = encodeURIComponent(btoa(JSON.stringify(valoresSeleccionados)));
+        const url = `${window.location.pathname}?sel=${encoded}`;
+        window.history.replaceState(null, '', url);
+        // También copiar al portapapeles
+        navigator.clipboard.writeText(window.location.origin + url);
+        alert('¡Enlace copiado al portapapeles!');
+    };
+
     return (
         <div className='container-horario'>
             <div className='container-tablero'>
                 <TablaHorario teoria={cursosTeo} laboratorio={cursosLab}/>
             </div>
             <div className='container-selectores'>
+                <button onClick={handleShare} style={{marginBottom: 16, padding: '8px 16px', background: '#6c47ff', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer'}}>Compartir</button>
                 <Selectores 
                 selectTeoria={selectTeo} 
                 selectLab={selectLab}
@@ -74,12 +86,20 @@ export default function Horario () {
     );
 }
 
-function Render({ baseDeDatos }) {
-    // Leer del localStorage al iniciar
+function Render({ baseDeDatos, exposeState = false }) {
+    // Leer del localStorage o de la URL al iniciar
     const [valoresSeleccionados, setValoresSeleccionados] = useState(() => {
         try {
-            const stored = localStorage.getItem('valoresSeleccionados');
-            return stored ? JSON.parse(stored) : {};
+            if (typeof window !== 'undefined') {
+                const params = new URLSearchParams(window.location.search);
+                const sel = params.get('sel');
+                if (sel) {
+                    return JSON.parse(atob(decodeURIComponent(sel)));
+                }
+                const stored = localStorage.getItem('valoresSeleccionados');
+                return stored ? JSON.parse(stored) : {};
+            }
+            return {};
         } catch {
             return {};
         }
@@ -102,6 +122,9 @@ function Render({ baseDeDatos }) {
     const cursos = mapCursos(baseDeDatos, valoresSeleccionados, handleChange);
     const selectores = mapSelectores(baseDeDatos, valoresSeleccionados, handleChange);
 
+    if (exposeState) {
+        return [cursos, selectores, valoresSeleccionados, setValoresSeleccionados];
+    }
     return [cursos, selectores];
 }
 
