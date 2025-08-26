@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { saveAs } from 'file-saver';
 
 import "./Horario.css";
 //import datos from "../../data/datos.json"
@@ -69,6 +70,57 @@ export default function Horario () {
         alert('¡Enlace copiado al portapapeles!');
     };
 
+    const generateICS = (valoresSeleccionados, datosCursosTeo, datosCursosLab) => {
+        let eventos = [];
+
+        const agregarEventos = (cursos) => {
+            cursos.forEach(curso => {
+                const grupoId = valoresSeleccionados[curso.id];
+                if (!grupoId) return;
+                const grupo = curso.grupos.find(g => `${curso.id}-${g.grupo}` === grupoId);
+                if (!grupo) return;
+                grupo.horarios.forEach(horario => {
+                    const diaSemana = {
+                        'LUNES': 1, 'MARTES': 2, 'MIERCOLES': 3, 'JUEVES': 4, 'VIERNES': 5
+                    }[horario.dia];
+                    const baseDate = new Date(2025, 8, 25 + diaSemana);
+                    const [hIni, mIni] = horario.hora_ini.split(':');
+                    const [hFin, mFin] = horario.hora_fin.split(':');
+                    const ini = new Date(baseDate);
+                    ini.setHours(hIni, mIni, 0, 0);
+                    const fin = new Date(baseDate);
+                    fin.setHours(hFin, mFin, 0, 0);
+
+                    const dtStart = ini.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, '');
+                    const dtEnd = fin.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, '');
+
+                    eventos.push(
+`BEGIN:VEVENT
+SUMMARY:${curso.nombre} (Grupo ${grupo.grupo})
+DESCRIPTION:Color: ${curso.color}
+DTSTART:${dtStart}
+DTEND:${dtEnd}
+END:VEVENT`
+                    );
+                });
+            });
+        };
+
+        agregarEventos(datosCursosTeo);
+        agregarEventos(datosCursosLab);
+
+        return `BEGIN:VCALENDAR
+VERSION:2.0
+${eventos.join('\n')}
+END:VCALENDAR`;
+    };
+
+    const handleExportCalendar = () => {
+        const ics = generateICS(valoresSeleccionados, datosCursosTeo, datosCursosLab);
+        const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+        saveAs(blob, 'horario_uni.ics');
+    };
+
     return (
         <div className='container-horario'>
             <div className='container-tablero'>
@@ -76,6 +128,7 @@ export default function Horario () {
             </div>
             <div className='container-selectores'>
                 <button onClick={handleShare} style={{marginBottom: 16, padding: '8px 16px', background: '#6c47ff', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer'}}>Compartir</button>
+                <button onClick={handleExportCalendar} style={{marginBottom: 16, marginLeft: 8, padding: '8px 16px', background: '#00b894', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer'}}>Exportar a Calendar</button>
                 <Selectores 
                 selectTeoria={selectTeo} 
                 selectLab={selectLab}
